@@ -311,8 +311,21 @@ class DQNAgent():
 
         # Create new replay memory
         self.memory = deque(maxlen=self.memory_size)
-
     def save(self, path):
+      print("--- DQNAgent.save method IS being called ---") # Temporary debug print
+
+      state_dict = self.qnetwork.state_dict()
+      metadata = {
+        "network_type": "advanced_conv",
+        "hidden_size": str(self.dqn_factory.hidden_size),
+        "num_layers": str(self.dqn_factory.num_layers),
+        "conv_layers_config": str(self.dqn_factory.conv_layers_config), # <-- VERY IMPORTANT LINE
+        "obs_shape": str(self.dqn_factory.obs_shape),
+        "action_shape": str(self.dqn_factory.action_shape),
+      }
+      save_file(state_dict, path, metadata=metadata)
+    def save_1(self, path):
+        
         state_dict = self.qnetwork.state_dict()
         metadata = {
             "network_type": "dense" if isinstance(self.qnetwork, DenseQNetwork) else "conv",
